@@ -7,10 +7,15 @@ class Wallet extends React.Component {
   componentDidMount() {
     const { callCurrencies } = this.props;
     callCurrencies();
+    // fetchExpenses();
+  }
+
+  handleSave = () => {
+    console.log('oi');
   }
 
   render() {
-    const { email } = this.props;
+    const { email, currencies } = this.props;
     const totalValue = 0;
 
     return (
@@ -60,8 +65,17 @@ class Wallet extends React.Component {
               name="coinName"
               id="coinName"
             >
-              <option name="coinName" value="normal">Normal</option>
-              <option name="coinName" value="raro">Raro</option>
+              {
+                currencies.map((currencie) => (
+                  <option
+                    key={ currencie }
+                    name={ currencie }
+                    value={ currencie }
+                  >
+                    { currencie }
+                  </option>
+                ))
+              }
             </select>
           </label>
           {' '}
@@ -99,6 +113,12 @@ class Wallet extends React.Component {
             </select>
           </label>
         </form>
+        <button
+          type="submit"
+          onClick={ this.handleSave }
+        >
+          Adicionar Despesas
+        </button>
       </div>
     );
   }
@@ -106,16 +126,18 @@ class Wallet extends React.Component {
 
 const mapDispatchToProps = (dispatch) => ({
   callCurrencies: (payload) => dispatch(fetchCurrencies(payload)),
+  // callExpenses: (payload) => dispatch(fetchExpenses(payload)),
 });
 
 const mapStateToProps = (state) => ({
   email: state.user.email,
-  // currencies: state.wallet.currencies,
+  currencies: state.wallet.currencies,
 });
 
 Wallet.propTypes = {
   email: PropTypes.string.isRequired,
   callCurrencies: PropTypes.func.isRequired,
+  currencies: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Wallet);
