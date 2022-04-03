@@ -225,7 +225,7 @@ const mapStateToProps = (state) => ({
   email: state.user.email,
   currencies: state.wallet.currencies,
   idPayment: state.wallet.idPayment,
-  totalValue: state.wallet.totalValue,
+  totalValue: Number(state.wallet.totalValue),
 });
 
 Wallet.propTypes = {
