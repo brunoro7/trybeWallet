@@ -16,6 +16,7 @@ class Wallet extends React.Component {
       idPayment: 0,
       valuePayment: '',
       receivedExchangeRates: '',
+      isZero: true,
     };
   }
 
@@ -35,13 +36,22 @@ class Wallet extends React.Component {
     const callAPI = await fetch(urlApi);
     const dataApi = await callAPI.json();
 
-    const { sendSetTotalValue } = this.props;
+    const { sendSetTotalValue, totalValue } = this.props;
     const { coinName, valuePayment } = this.state;
     // console.log(dataApi[coinName].ask);
     const cotation = Number(dataApi[coinName].ask);
     const resultConverse = (Number(valuePayment) * cotation);
 
     sendSetTotalValue(Number(resultConverse));
+    if (totalValue !== 0) {
+      this.setState({
+        isZero: false,
+      });
+    } else {
+      this.setState({
+        isZero: true,
+      });
+    }
 
     this.setState({
       receivedExchangeRates: dataApi,
@@ -86,7 +96,11 @@ class Wallet extends React.Component {
   render() {
     const { email, currencies, totalValue } = this.props;
     const { descriptionValue, valuePayment, coinName,
-      payChoice, categoryTag } = this.state;
+      payChoice, categoryTag, isZero } = this.state;
+
+    const initTotalValue = 0;
+    const comparTotalValues = (isZero)
+      ? initTotalValue : totalValue.toFixed(2);
 
     return (
       <div>
@@ -96,7 +110,7 @@ class Wallet extends React.Component {
           </h3>
           <h4 data-testid="email-field">{ email }</h4>
           <h4 data-testid="total-field" name="totalValue">
-            { totalValue }
+            { comparTotalValues }
           </h4>
           {' '}
           <span data-testid="header-currency-field">BRL</span>
@@ -211,16 +225,16 @@ const mapStateToProps = (state) => ({
   email: state.user.email,
   currencies: state.wallet.currencies,
   idPayment: state.wallet.idPayment,
-  totalValue: state.wallet.totalValue.toFixed(2),
+  totalValue: state.wallet.totalValue,
 });
 
 Wallet.propTypes = {
   email: PropTypes.string.isRequired,
   callCurrencies: PropTypes.func.isRequired,
   currencies: PropTypes.arrayOf(PropTypes.string).isRequired,
-  totalValue: PropTypes.string.isRequired,
   sendSetTotalValue: PropTypes.func.isRequired,
   sendSetExpenses: PropTypes.func.isRequired,
+  // totalValue: PropTypes.number.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Wallet);
