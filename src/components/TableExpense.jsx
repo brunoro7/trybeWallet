@@ -87,10 +87,6 @@ class TableExpense extends React.Component {
   }
 }
 
-const mapDispatchToProps = (dispatch) => ({
-  // dispatchSendUpdateExpenses: (payload) => dispatch(sendUpdateExpenses(payload)),
-});
-
 const mapStateToProps = (state) => ({
   expenses: state.wallet.expenses,
   currency: state.wallet.expenses.currency,
@@ -100,4 +96,4 @@ TableExpense.propTypes = {
   expenses: PropTypes.arrayOf(Object).isRequired,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TableExpense);
+export default connect(mapStateToProps)(TableExpense);
