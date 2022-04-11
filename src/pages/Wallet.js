@@ -146,7 +146,7 @@ class Wallet extends React.Component {
             Moeda:
             {' '}
             <select
-              data-testid="rare-input"
+              data-testid="currency-input"
               type="select"
               name="coinName"
               id="coinName"
